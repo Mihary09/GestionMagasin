@@ -1,40 +1,38 @@
 import java.awt.EventQueue;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
-import javax.swing.border.EmptyBorder;
+import javax.swing.border.LineBorder;
+import java.awt.Color;
 import javax.swing.JLabel;
 import java.awt.Font;
 import javax.swing.SwingConstants;
-import javax.swing.border.LineBorder;
-import java.awt.Color;
-import javax.swing.JComboBox;
 import javax.swing.JTextField;
+import javax.swing.JComboBox;
 import javax.swing.JList;
-import javax.swing.JOptionPane;
 import javax.swing.DefaultListModel;
 import javax.swing.JButton;
+import javax.swing.JOptionPane;
 import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
 
 public class Librairie extends JFrame {
-	
-	// mon codeee
-	
-	String [] produits = {"Stylo", "Crayon", "Cahier", "Gomme", "Colle"};
-	double prixUnitaire, total = 0, montant;
-	int nombreProduits, produitsListeAchat = 0;
-	String produitSelectionné;
-	
-	// D�claration de DefaultListModel mon code
+
+    // Variables pour la gestion des produits et des montants
+    String[] produits = {"Stylo", "Crayon", "Cahier", "Gomme", "Colle"};
+    double prixUnitaire, total = 0, montant;
+    int nombreProduits, produitsListeAchat = 0;
+    String produitSelectionné;
+
     DefaultListModel modeleProduit, modeleMontant;
-	
+
     private static final long serialVersionUID = 1L;
     private JTextField txtPrix;
     private JTextField txtNombre;
-    private JLabel lblMontants;
+    private JLabel lblNombreProduits;
+    private JLabel lblSommeTotal;
 
     /**
-     * Launch the application.
+     * Point d'entrée du programme.
      */
     public static void main(String[] args) {
         EventQueue.invokeLater(new Runnable() {
@@ -50,248 +48,185 @@ public class Librairie extends JFrame {
     }
 
     /**
-     * Create the frame.
+     * Constructeur principal : gestion de l'interface.
      */
     public Librairie() {
-    	
-    	// Initialisation de DefaultListModel
+        // Initialisation des modèles pour les listes dynamiques
         modeleProduit = new DefaultListModel();
         modeleMontant = new DefaultListModel();
-    	
+
+        // Configuration de la fenêtre principale
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        setBounds(100, 100, 990, 547);
-        getContentPane().setLayout(null); // Utiliser un layout null
-        
-        JLabel lblNewLabel = new JLabel("Gestion de Librairies");
+        setBounds(100, 100, 990, 600);
+        getContentPane().setLayout(null);
+
+        // Titre principal
+        JLabel lblNewLabel = new JLabel("Gestion de Librairie et Produits");
         lblNewLabel.setHorizontalAlignment(SwingConstants.CENTER);
-        lblNewLabel.setFont(new Font("Arial", Font.BOLD, 36));
-        lblNewLabel.setBounds(245, 10, 500, 50); // D�finir la position et taille
+        lblNewLabel.setFont(new Font("Arial", Font.BOLD, 32));
+        lblNewLabel.setBounds(245, 10, 500, 50);
         getContentPane().add(lblNewLabel);
 
+        // Panel pour les entrées
         JPanel panel = new JPanel();
         panel.setBorder(new LineBorder(new Color(0, 0, 0)));
-        panel.setBounds(10, 70, 221, 300); // D�finir la position et taille
-        panel.setLayout(null); // Layout null pour les composants internes
+        panel.setBounds(10, 70, 230, 320);
+        panel.setLayout(null);
         getContentPane().add(panel);
-        
 
-        // ENTRER LE PRODUIT
-        JLabel lblProduits =  new JLabel("Choisir le produit");
+        // Choix du produit
+        JLabel lblProduits = new JLabel("Choisir le produit");
         lblProduits.setHorizontalAlignment(SwingConstants.LEFT);
         lblProduits.setFont(new Font("Times New Roman", Font.BOLD, 18));
-        lblProduits.setBounds(10, 18, 200, 30); // D�finir la position et taille
+        lblProduits.setBounds(10, 10, 200, 30);
         panel.add(lblProduits);
-        
-         
-        // CHOIX DES PRODUITS
-        JComboBox cmbProduit = new JComboBox();
-        cmbProduit.setBounds(10, 46, 200, 30); // D�finir la position et taille
-        panel.add(cmbProduit);
-        
-        	
-        // ENTRER LE PRIX
 
-        JLabel lblPrix = new JLabel("Entrer le prix unitaire");
-        lblPrix.setHorizontalAlignment(SwingConstants.CENTER);
+        JComboBox cmbProduit = new JComboBox();
+        cmbProduit.setBounds(10, 40, 200, 30);
+        panel.add(cmbProduit);
+
+        // Ajouter les produits au combo box
+        for (String produit : produits) {
+            cmbProduit.addItem(produit);
+        }
+
+        // Entrer le prix
+        JLabel lblPrix = new JLabel("Prix unitaire");
         lblPrix.setFont(new Font("Times New Roman", Font.BOLD, 18));
-        lblPrix.setBounds(0, 100, 190, 30); // D�finir la position et taille
+        lblPrix.setBounds(10, 80, 200, 30);
         panel.add(lblPrix);
 
-        // INTRODUCTION DES PRIX
         txtPrix = new JTextField();
-        txtPrix.setBounds(10, 130, 200, 30); // D�finir la position et taille
+        txtPrix.setBounds(10, 110, 200, 30);
         panel.add(txtPrix);
-        txtPrix.setColumns(10);
-        
-        
-        // ENTRER LE NOMBRE
-        
-        JLabel lblNombre = new JLabel("Entrer le nombre");
-        lblNombre.setHorizontalAlignment(SwingConstants.LEFT);
-        lblNombre.setFont(new Font("Times New Roman", Font.BOLD, 18));
-        lblNombre.setBounds(10, 182, 200, 30); // D�finir la position et taille
-        panel.add(lblNombre);
-        
-        // INTRO DES NOMBRES
-        txtNombre = new JTextField();
-        txtNombre.setBounds(10, 212, 200, 30); // D�finir la position et taille
-        panel.add(txtNombre);
-        txtNombre.setColumns(10);
 
+        // Entrer la quantité
+        JLabel lblNombre = new JLabel("Quantité");
+        lblNombre.setFont(new Font("Times New Roman", Font.BOLD, 18));
+        lblNombre.setBounds(10, 150, 200, 30);
+        panel.add(lblNombre);
+
+        txtNombre = new JTextField();
+        txtNombre.setBounds(10, 180, 200, 30);
+        panel.add(txtNombre);
+
+        // Panel pour afficher les achats
         JPanel panel_1 = new JPanel();
         panel_1.setBorder(new LineBorder(new Color(0, 0, 0)));
-        panel_1.setBounds(255, 71, 715, 300); // D�finir la position et taille
-        panel_1.setLayout(null); // Layout null pour les composants internes
+        panel_1.setBounds(260, 70, 700, 320);
+        panel_1.setLayout(null);
         getContentPane().add(panel_1);
 
-        JLabel lblAchat = new JLabel("Liste d'achats");
+        JLabel lblAchat = new JLabel("Liste des Achats");
         lblAchat.setHorizontalAlignment(SwingConstants.CENTER);
-        lblAchat.setFont(new Font("Times New Roman", Font.BOLD, 22));
-        lblAchat.setBounds(28, 11, 250, 30); // D�finir la position et taille
+        lblAchat.setFont(new Font("Times New Roman", Font.BOLD, 20));
+        lblAchat.setBounds(20, 10, 250, 30);
         panel_1.add(lblAchat);
 
-        lblMontants = new JLabel("Montants");
-        lblMontants.setHorizontalAlignment(SwingConstants.CENTER);
-        lblMontants.setFont(new Font("Times New Roman", Font.BOLD, 22));
-        lblMontants.setBounds(443, 11, 118, 30); // D�finir la position et taille
-        panel_1.add(lblMontants);
-        
-        
-        // LISTES DES ACHATS
         JList lstAchat = new JList();
-        lstAchat.setBounds(10, 45, 317, 195);
+        lstAchat.setBounds(20, 50, 300, 200);
         panel_1.add(lstAchat);
-        lstAchat.setModel(modeleProduit); // je sais pas
-        
-        // LISTES DES MONTANTS
+        lstAchat.setModel(modeleProduit);
+
+        JLabel lblMontants = new JLabel("Montants");
+        lblMontants.setHorizontalAlignment(SwingConstants.CENTER);
+        lblMontants.setFont(new Font("Times New Roman", Font.BOLD, 20));
+        lblMontants.setBounds(380, 10, 250, 30);
+        panel_1.add(lblMontants);
+
         JList lstMontant = new JList();
-        lstMontant.setBounds(371, 45, 334, 195);
+        lstMontant.setBounds(380, 50, 300, 200);
         panel_1.add(lstMontant);
-        //suite mon code 5
         lstMontant.setModel(modeleMontant);
-        
-        // TOTAL LISTES DES ACHATS
-        JLabel lblNombreProduits = new JLabel("n");
+
+        lblNombreProduits = new JLabel("0");
         lblNombreProduits.setHorizontalAlignment(SwingConstants.CENTER);
-        lblNombreProduits.setBounds(10, 251, 317, 38);
+        lblNombreProduits.setBounds(20, 260, 300, 30);
         panel_1.add(lblNombreProduits);
-        
-        // mon code
-        lblNombreProduits.setText(String.valueOf(produitsListeAchat));
-        // mon code1
-        for (int i = 0; i <produits.length; i++) {
-        	cmbProduit.addItem(produits[i]);
-        }
-     
-        // TOTAL LISTE DES MONTANTS
-        JLabel lblSommeTotal = new JLabel("n");
+
+        lblSommeTotal = new JLabel("0.0");
         lblSommeTotal.setHorizontalAlignment(SwingConstants.CENTER);
-        lblSommeTotal.setBounds(371, 251, 334, 38);
+        lblSommeTotal.setBounds(380, 260, 300, 30);
         panel_1.add(lblSommeTotal);
-        // mon code2
-        lblSommeTotal.setText(String.valueOf(total));
-        
+
+        // Boutons interactifs
         JPanel panel_2 = new JPanel();
         panel_2.setBorder(new LineBorder(new Color(0, 0, 0)));
-        panel_2.setBounds(10, 380, 960, 100); // D�finir la position et taille
+        panel_2.setBounds(10, 400, 950, 100);
+        panel_2.setLayout(null);
         getContentPane().add(panel_2);
-        panel_2.setLayout(null); // Layout null pour les composants internes
-        
-        
-        // BOUTTON AJOUTER
-        
+
+        // Ajouter un produit
         JButton btnAjouter = new JButton("Ajouter");
         btnAjouter.addActionListener(new ActionListener() {
-        	public void actionPerformed(ActionEvent e) {
-        		
-        		// la condition verifie ....
-        		if (!txtPrix.getText() .isEmpty() && !txtNombre.getText() .isEmpty() )
-        		{
-        		produitSelectionné = cmbProduit.getSelectedItem().toString();
-        		prixUnitaire = Double.parseDouble(txtPrix.getText());
-        		nombreProduits = Integer.parseInt(txtNombre.getText());  // je sais pas3
-        		
-        		
-        		modeleProduit.addElement(produitSelectionné);  // je sais pas2
-        		// mon code5
-        		montant = prixUnitaire*nombreProduits;
-        		modeleMontant.addElement(montant);
-        		produitsListeAchat++;
-        		lblNombreProduits.setText(String.valueOf(produitsListeAchat));
-        		total = Double.parseDouble(lblSommeTotal.getText());
-        		total +=montant;
-        		lblSommeTotal.setText(String.valueOf(total)); 
-        		
-        		// Mise � jours automatique du prix unitaire entrer et le nombre entrer recompte � vide
-        		txtPrix.setText("");
-                txtNombre.setText("");
-                txtPrix.requestFocus();
-                // 
-        		} else {
-                    // Afficher un message d'erreur ou effectuer une autre action si les champs sont vides
-                    System.out.println("Veuillez remplir tous les champs !");    }
-        	}
-        });
-        btnAjouter.setFont(new Font("Tahoma", Font.PLAIN, 18));
-        btnAjouter.setBounds(37, 41, 112, 23);
-        panel_2.add(btnAjouter);
-        
-        
-        // BOUTTON SUPPRIMER
-        JButton btnSupprimer = new JButton("Supprimer");
-        btnSupprimer.setFont(new Font("Tahoma", Font.PLAIN, 18));
-        // pour supprimer ....
-        btnSupprimer.addActionListener(new ActionListener() {
-        	public void actionPerformed(ActionEvent e) {
-        		int produitSelectionneIndex = lstAchat.getSelectedIndex();
-        		
-        		if (!lstAchat.isSelectionEmpty()) {
-        			produitsListeAchat = Integer.parseInt(lblNombreProduits.getText());
-        			produitsListeAchat--;
-        			lblNombreProduits.setText(String.valueOf(produitsListeAchat));
-        			total = Double.parseDouble(lblSommeTotal.getText());  
-        			montant = Double.parseDouble(modeleMontant.getElementAt(produitSelectionneIndex).toString());
-        			total-=montant;
-        			lblSommeTotal.setText(String.valueOf(total));
-        			modeleProduit.remove(produitSelectionneIndex);
-        			modeleMontant.remove(produitSelectionneIndex);
-        		}
-        		else {
-                    // Afficher un message d'erreur si aucun produit n'est s�lectionn�
-                    System.out.println("Veuillez s�lectionner un produit � supprimer !");
+            public void actionPerformed(ActionEvent e) {
+                if (!txtPrix.getText().isEmpty() && !txtNombre.getText().isEmpty()) {
+                    produitSelectionné = cmbProduit.getSelectedItem().toString();
+                    prixUnitaire = Double.parseDouble(txtPrix.getText());
+                    nombreProduits = Integer.parseInt(txtNombre.getText());
+                    modeleProduit.addElement(produitSelectionné);
+                    montant = prixUnitaire * nombreProduits;
+                    modeleMontant.addElement(montant);
+                    produitsListeAchat++;
+                    lblNombreProduits.setText(String.valueOf(produitsListeAchat));
+                    total += montant;
+                    lblSommeTotal.setText(String.valueOf(total));
+                    txtPrix.setText("");
+                    txtNombre.setText("");
+                } else {
+                    System.out.println("Veuillez remplir tous les champs !");
                 }
-        	}
+            }
         });
-        btnSupprimer.setBounds(251, 41, 123, 23);
+        btnAjouter.setBounds(30, 30, 120, 30);
+        panel_2.add(btnAjouter);
+
+        // Supprimer un produit
+        JButton btnSupprimer = new JButton("Supprimer");
+        btnSupprimer.addActionListener(new ActionListener() {
+            public void actionPerformed(ActionEvent e) {
+                int produitSelectionneIndex = lstAchat.getSelectedIndex();
+                if (!lstAchat.isSelectionEmpty()) {
+                    produitsListeAchat--;
+                    lblNombreProduits.setText(String.valueOf(produitsListeAchat));
+                    montant = Double.parseDouble(modeleMontant.getElementAt(produitSelectionneIndex).toString());
+                    total -= montant;
+                    lblSommeTotal.setText(String.valueOf(total));
+                    modeleProduit.remove(produitSelectionneIndex);
+                    modeleMontant.remove(produitSelectionneIndex);
+                } else {
+                    System.out.println("Veuillez sélectionner un produit à supprimer !");
+                }
+            }
+        });
+        btnSupprimer.setBounds(160, 30, 120, 30);
         panel_2.add(btnSupprimer);
-        
-        
-        // BOUTTON EFFACER 
+
+        // Effacer toutes les données
         JButton btnEffacer = new JButton("Effacer");
-        btnEffacer.setFont(new Font("Tahoma", Font.PLAIN, 18));
-        btnEffacer.setBounds(513, 41, 89, 23);
-        panel_2.add(btnEffacer);
-        // pour effacer ce qui a �t� �crit
         btnEffacer.addActionListener(new ActionListener() {
-        public void actionPerformed(ActionEvent e) {
-            txtPrix.setText("");
-            txtNombre.setText("");
-            modeleProduit.removeAllElements();
-            modeleMontant.removeAllElements();
-            produitsListeAchat = 0;
-            total = 0;
-            lblNombreProduits.setText(String.valueOf(produitsListeAchat));
-            lblSommeTotal.setText(String.valueOf(total));
-        }
-        }); 
-        
-        
-        // 	BOUTTON QUITTER
+            public void actionPerformed(ActionEvent e) {
+                txtPrix.setText("");
+                txtNombre.setText("");
+                modeleProduit.removeAllElements();
+                modeleMontant.removeAllElements();
+                produitsListeAchat = 0;
+                total = 0;
+                lblNombreProduits.setText("0");
+                lblSommeTotal.setText("0.0");
+            }
+        });
+        btnEffacer.setBounds(290, 30, 120, 30);
+        panel_2.add(btnEffacer);
+
+        // Quitter l'application
         JButton btnQuitter = new JButton("Quitter");
-        // pour quitter le plateform
         btnQuitter.addActionListener(new ActionListener() {
-        	public void actionPerformed(ActionEvent e) {
-        		// mon code
-        		System.exit(0);
-        	}
+            public void actionPerformed(ActionEvent e) {
+                System.exit(0);
+            }
         });
-        btnQuitter.setFont(new Font("Tahoma", Font.PLAIN, 18));
-        btnQuitter.setBounds(787, 41, 89, 23);
+        btnQuitter.setBounds(420, 30, 120, 30);
         panel_2.add(btnQuitter);
-        
-        
-        // BOUTTON AJOUTER PRODUIT
-        JButton btnAjouterProduit = new JButton("Ajouter un nouveau produit");
-        btnAjouterProduit.addActionListener(new ActionListener() {
-        	public void actionPerformed(ActionEvent e) {
-        		String produit = JOptionPane.showInputDialog(null, 
-        				"Entrez le nouveau produit", 
-        				"Ajout produit",
-        				JOptionPane.DEFAULT_OPTION);
-        		cmbProduit.addItem(produit);
-        	}
-        });
-        btnAjouterProduit.setBounds(10, 10, 221, 45);
-        getContentPane().add(btnAjouterProduit);
     }
 }
