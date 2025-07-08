@@ -47,7 +47,7 @@ L'utilisateur peut :
 
 1. **Cloner le dépôt** :
    ```bash
-   git clone https://github.com/Mihary09/GestionUtilisateurs
+   git clone https://github.com/Mihary09/GestionMagasin
 
 
 Compiler et exécuter l’application :
